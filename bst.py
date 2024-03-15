@@ -111,3 +111,33 @@ class BST:
         node.left = self._deserialize_recursive(values)
         node.right = self._deserialize_recursive(values)
         return node
+    
+    def delete(self, value):
+        self.root = self._delete_recursive(self.root, value)
+
+    def _delete_recursive(self, node, value):
+        if not node:
+            return node
+
+        if value < node.value:
+            node.left = self._delete_recursive(node.left, value)
+        elif value > node.value:
+            node.right = self._delete_recursive(node.right, value)
+        else:  # Found the node to delete
+            # Case 1: Node to delete is a leaf node or has only one child
+            if not node.left:
+                return node.right
+            elif not node.right:
+                return node.left
+
+            # Case 2: Node to delete has two children
+            min_node = self._find_min_node(node.right)
+            node.value = min_node.value
+            node.right = self._delete_recursive(node.right, min_node.value)
+
+        return node
+
+    def _find_min_node(self, node):
+        while node.left:
+            node = node.left
+        return node

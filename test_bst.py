@@ -53,5 +53,25 @@ class TestBSTMethods(unittest.TestCase):
         new_bst.deserialize(serialized_tree)
         self.assertEqual(self.bst.in_order_traversal(), new_bst.in_order_traversal())
 
+    def test_delete_leaf_node(self):
+        self.bst.delete(2)
+        self.assertFalse(self.bst.search(2))
+        self.assertEqual(self.bst.in_order_traversal(), [3, 4, 5, 6, 7, 8])
+
+    def test_delete_node_with_one_child(self):
+        self.bst.delete(3)
+        self.assertFalse(self.bst.search(3))
+        self.assertEqual(self.bst.in_order_traversal(), [2, 4, 5, 6, 7, 8])
+
+    def test_delete_node_with_two_children(self):
+        self.bst.delete(7)
+        self.assertFalse(self.bst.search(7))
+        self.assertEqual(self.bst.in_order_traversal(), [2, 3, 4, 5, 6, 8])
+
+    def test_delete_root_node(self):
+        self.bst.delete(5)
+        self.assertFalse(self.bst.search(5))
+        self.assertEqual(self.bst.in_order_traversal(), [2, 3, 4, 6, 7, 8])
+
 if __name__ == '__main__':
     unittest.main()
