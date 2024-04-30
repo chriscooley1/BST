@@ -44,7 +44,9 @@ class BST:
         self._in_order_traversal_recursive(self.root, result)
         return result
 
-    def _in_order_traversal_recursive(self, node, result):
+    def _in_order_traversal_recursive(self, node, result=None):
+        if result is None:
+            result = []
         if node:
             self._in_order_traversal_recursive(node.left, result)
             result.append(node.value)
@@ -67,12 +69,14 @@ class BST:
         return node.value
 
     def height(self):
-        return self._height_recursive(self.root)
+        return self._height_recursive(self.root) - 1 if self.root else 0
 
     def _height_recursive(self, node):
         if not node:
-            return -1
-        return 1 + max(self._height_recursive(node.left), self._height_recursive(node.right))
+            return 0
+        left_height = self._height_recursive(node.left)
+        right_height = self._height_recursive(node.right)
+        return 1 + max(left_height, right_height)
 
     def count_leaves(self):
         return self._count_leaves_recursive(self.root)
@@ -87,15 +91,15 @@ class BST:
     def serialize(self):
         serialized_tree = []
         self._serialize_recursive(self.root, serialized_tree)
-        return ','.join(map(str, serialized_tree))
+        return ','.join(serialized_tree)
 
     def _serialize_recursive(self, node, serialized_tree):
-        if node:
-            serialized_tree.append(node.value)
+        if not node:
+            serialized_tree.append('None')
+        else:
+            serialized_tree.append(str(node.value))
             self._serialize_recursive(node.left, serialized_tree)
             self._serialize_recursive(node.right, serialized_tree)
-        else:
-            serialized_tree.append(None)
 
     def deserialize(self, tree):
         values = tree.split(',')
